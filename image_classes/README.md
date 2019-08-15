@@ -1,6 +1,8 @@
 # caffe实现图片分类
 
 # 数据介绍
+下载地址：https://pan.baidu.com/s/1D8gW8dnLK-Nm5VOjLsKAeg
+
 数据集共500张，分为5类，分别是：大巴，恐龙，大象，花朵，马
 
 训练集：400，测试集：100

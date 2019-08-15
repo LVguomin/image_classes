@@ -14,9 +14,9 @@ time_begin = time.time()
 os.chdir(caffe_root)#更换工作目录
 
 # 设置网络结构
-net_file='/home2/workplce/github/caffe_img_cls/caffenet/deploy.prototxt'
+net_file='/home2/workplce/github/image_classes/caffenet/deploy.prototxt'
 # 添加训练之后的参数
-caffe_model='/home2/workplce/github/caffe_img_cls/caffenet/models/caffenet_train_iter_500.caffemodel'
+caffe_model='/home2/workplce/github/image_classes/caffenet/models/caffenet_train_iter_500.caffemodel'
 '''
 #这是一个由mean.binaryproto文件生成mean.npy文件的函数
 def convert_mean(binMean,npyMean):
@@ -48,7 +48,7 @@ transformer.set_raw_scale('data', 255)
 transformer.set_channel_swap('data', (2,1,0))
 
 # 加载一张测试图片
-image_file = '/home2/workplce/github/caffe_img_cls/data/image/test/711.jpg'
+image_file = '/home2/workplce/github/image_classes/data/image/test/711.jpg'
 im=caffe.io.load_image(image_file)
 # 用上面的transformer.preprocess来处理刚刚加载图片
 net.blobs['data'].data[...] = transformer.preprocess('data',im)
@@ -65,7 +65,7 @@ score = round(np.max(output_prob),3)
 
 print '\n测试图片: {}'.format(image_file)
 print '\n预测结果:\n类别 {}； 得分 {}'.format(label, score)
-print '\ntime used: ', round(time.time()-time_begin, 4), 's'
+print '\n用时: ', round(time.time()-time_begin, 4), 's'
 img = cv2.imread(image_file)
 cv2.imwrite('./result.jpg',img)
 #cv2.imshow('img',img)

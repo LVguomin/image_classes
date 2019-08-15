@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-DATA=/home2/workplce/github/caffe_img_cls/data
+DATA=/home2/workplce/github/image_classes/data
 CAFFE_DIR=/home2/caffe
 
 echo "Create train lmdb..."
