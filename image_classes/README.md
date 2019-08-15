@@ -17,23 +17,24 @@ caffenet/：存放prototxt文件及模型
 preprocess/：存放数据处理脚本及测试代码
 
 # 数据处理
-1.执行 sh preprocess/create_filelist.sh 
+## 1.执行 sh preprocess/create_filelist.sh 
  
  作用是在data/label/目录下生成训练集和测试集的图片和标签列表
 
  需注意的是修改脚本里自己的DATA路径
 
-2.执行 sh preprocess/create_lmdb.sh
+## 2.执行 sh preprocess/create_lmdb.sh
 
  在data/下生成train_lmdb、test_lmdb，注意修改自己的DATA、CAFFE_DIR路径
 
-3.在caffenet/路径下执行：
+## 3.训练 
+ 在caffenet/路径下执行：
 
  caffe train -solver solver.prototxt 
 
  注意train_val.prototxt中data_param下数据路径修改为自己的
 
-4.训练完后测试
+## 4.测试
 
  Python preprocess/pycaffe_test.py
 
