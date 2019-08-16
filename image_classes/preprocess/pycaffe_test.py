@@ -1,7 +1,7 @@
 #encoding:utf-8
 import sys,os
 caffe_root = '/home2/caffe/'
-sys.path.append(caffe_root + 'python')
+#sys.path.append(caffe_root + 'python')
 import numpy as np
 import caffe
 import cv2
@@ -58,7 +58,8 @@ output = net.forward()
 #print('output:',len(output['prob'][0]))
 output_prob = output['prob'][0]
 # 找出最大的那个概率
-chars = ["大巴", "恐龙", "大象", "花朵", "马"]
+chars = ["0", "1", "2", "3", "4"]
+#chars = ["大巴", "恐龙", "大象", "花朵", "马"]
 
 label = chars[output_prob.argmax()]
 score = round(np.max(output_prob),3)
@@ -67,7 +68,7 @@ print '\n测试图片: ',image_file
 print '\n预测结果:\n类别 %s； 得分 %f'%(label, score)
 print '\n用时: ', round(time.time()-time_begin, 4), 's'
 img = cv2.imread(image_file)
-cv2.putText(img, 'label:%s'%label, (30,30), 1, 2, (0,255,255)) 
+cv2.putText(img, '%s:%f'%(label,score), (30,30), 1, 2, (0,255,255)) 
 cv2.imwrite('./result.jpg',img)
 cv2.imshow('img',img)
 cv2.waitKey(0)
