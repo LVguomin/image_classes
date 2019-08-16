@@ -48,27 +48,31 @@ transformer.set_raw_scale('data', 255)
 transformer.set_channel_swap('data', (2,1,0))
 
 # 加载一张测试图片
-image_file = '/home2/workplce/github/image_classes/data/image/test/711.jpg'
-im=caffe.io.load_image(image_file)
-# 用上面的transformer.preprocess来处理刚刚加载图片
-net.blobs['data'].data[...] = transformer.preprocess('data',im)
-#网络开始向前传播啦
-output = net.forward()
-# 最终的结果: 当前这个图片的属于哪个物体的概率(列表表示)
-#print('output:',len(output['prob'][0]))
-output_prob = output['prob'][0]
-# 找出最大的那个概率
-chars = ["0", "1", "2", "3", "4"]
-#chars = ["大巴", "恐龙", "大象", "花朵", "马"]
-
-label = chars[output_prob.argmax()]
-score = round(np.max(output_prob),3)
-
-print '\n测试图片: ',image_file
-print '\n预测结果:\n类别 %s； 得分 %f'%(label, score)
-print '\n用时: ', round(time.time()-time_begin, 4), 's'
-img = cv2.imread(image_file)
-cv2.putText(img, '%s:%f'%(label,score), (30,30), 1, 2, (0,255,255)) 
-cv2.imwrite('./result.jpg',img)
-cv2.imshow('img',img)
-cv2.waitKey(0)
+test_img_path = '/home2/workplce/github/image_classes/caffenet/test_img/'
+file_list = os.listdir(test_img_path)
+for file in file_list:
+    if os.path.splitext(file)[1] == '.jpg':
+        image_file = os.path.join(test_img_path, file)
+        im=caffe.io.load_image(image_file)
+        # 用上面的transformer.preprocess来处理刚刚加载图片
+        net.blobs['data'].data[...] = transformer.preprocess('data',im)
+        #网络开始向前传播啦
+        output = net.forward()
+        # 最终的结果: 当前这个图片的属于哪个物体的概率(列表表示)
+        #print('output:',len(output['prob'][0]))
+        output_prob = output['prob'][0]
+        # 找出最大的那个概率
+        chars = ["0", "1", "2", "3", "4"]
+        #chars = ["大巴", "恐龙", "大象", "花朵", "马"]
+        
+        label = chars[output_prob.argmax()]
+        score = np.max(output_prob)
+        
+        print '\n测试图片: ',image_file
+        print '\n预测结果:\n类别 %s； 得分 %.3f'%(label, score)
+        print '\n用时: ', round(time.time()-time_begin, 4), 's'
+        img = cv2.imread(image_file)
+        cv2.putText(img, '%s:%.3f'%(label,score), (30,30), 1, 2, (0,0,255)) 
+        cv2.imwrite('./result.jpg',img)
+        cv2.imshow('img',img)
+        cv2.waitKey(0)
