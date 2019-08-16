@@ -17,7 +17,7 @@ os.chdir(caffe_root)#更换工作目录
 net_file='/home2/workplce/github/image_classes/caffenet/deploy.prototxt'
 # 添加训练之后的参数
 caffe_model='/home2/workplce/github/image_classes/caffenet/models/caffenet_train_iter_500.caffemodel'
-'''
+
 #这是一个由mean.binaryproto文件生成mean.npy文件的函数
 def convert_mean(binMean,npyMean):
     blob = caffe.proto.caffe_pb2.BlobProto()
@@ -26,11 +26,11 @@ def convert_mean(binMean,npyMean):
     arr = np.array( caffe.io.blobproto_to_array(blob) )
     npy_mean = arr[0]
     np.save(npyMean, npy_mean )
-binMean='../data/mean.binaryproto' #修改成你的mean.binaryproto文件的路径
+binMean='/home2/workplce/github/image_classes/data/mean.binaryproto' #修改成你的mean.binaryproto文件的路径
 # 均值文件
-mean_file='../data/mean.npy' #你想把生成的mean.npy文件放在哪个路径下
+mean_file='/home2/workplce/github/image_classes/data/mean.npy' #你想把生成的mean.npy文件放在哪个路径下
 convert_mean(binMean,mean_file)
-'''
+
 # 这里对任何一个程序都是通用的，就是处理图片
 # 把上面添加的两个变量都作为参数构造一个Net
 net = caffe.Net(net_file,caffe_model,caffe.TEST)
@@ -41,7 +41,7 @@ transformer = caffe.io.Transformer({'data': net.blobs['data'].data.shape})
 
 # channel 放到前面
 transformer.set_transpose('data', (2,0,1))
-#transformer.set_mean('data', np.load(mean_file).mean(1).mean(1)) #如果你在训练模型的时候没有对输入做mean操作，那么这边也不需要
+transformer.set_mean('data', np.load(mean_file).mean(1).mean(1)) #如果你在训练模型的时候没有对输入做mean操作，那么这边也不需要
 # 图片像素放大到[0-255]
 transformer.set_raw_scale('data', 255)
 # RGB-->BGR 转换
@@ -63,11 +63,11 @@ chars = ["大巴", "恐龙", "大象", "花朵", "马"]
 label = chars[output_prob.argmax()]
 score = round(np.max(output_prob),3)
 
-print '\n测试图片: {}'.format(image_file)
-print '\n预测结果:\n类别 {}； 得分 {}'.format(label, score)
+print '\n测试图片: ',image_file
+print '\n预测结果:\n类别 %s； 得分 %f'%(label, score)
 print '\n用时: ', round(time.time()-time_begin, 4), 's'
 img = cv2.imread(image_file)
+cv2.putText(img, 'label:%s'%label, (30,30), 1, 2, (0,255,255)) 
 cv2.imwrite('./result.jpg',img)
-#cv2.imshow('img',img)
-cv2.putText(img, 'label', (30,30), 1, 2, (0,255,255)) 
-#cv2.waitKey(0)
+cv2.imshow('img',img)
+cv2.waitKey(0)
