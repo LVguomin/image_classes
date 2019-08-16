@@ -27,14 +27,18 @@ preprocess/：存放数据处理脚本及测试代码
 
  在data/下生成train_lmdb、test_lmdb，注意修改自己的DATA、CAFFE_DIR路径
 
-## 3.训练 
+## 3.生成均值文件
+
+在data/下 执行 compute_image_mean ./train_lmdb ./mean.binaryproto
+
+## 4.训练 
  在caffenet/路径下执行：
 
  caffe train -solver solver.prototxt 
 
  注意train_val.prototxt中data_param下数据路径修改为自己的
 
-## 4.测试
+## 5.测试
 
  Python preprocess/pycaffe_test.py
 
