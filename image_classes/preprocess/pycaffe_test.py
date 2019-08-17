@@ -4,14 +4,15 @@ import numpy as np
 import caffe
 import cv2
 import time
+import config
 #caffe.set_device(0)
 caffe.set_mode_cpu()
 time_begin = time.time()
 
 # 设置网络结构
-net_file='/home2/workplce/github/image_classes/caffenet/deploy.prototxt'
+net_file=config.net_file
 # 添加训练之后的参数
-caffe_model='/home2/workplce/github/image_classes/caffenet/models/caffenet_train_iter_4000.caffemodel'
+caffe_model=config.caffe_model
 
 #这是一个由mean.binaryproto文件生成mean.npy文件的函数
 def convert_mean(binMean,npyMean):
@@ -21,9 +22,9 @@ def convert_mean(binMean,npyMean):
     arr = np.array( caffe.io.blobproto_to_array(blob) )
     npy_mean = arr[0]
     np.save(npyMean, npy_mean )
-binMean='/home2/workplce/github/image_classes/data/mean.binaryproto' #修改成你的mean.binaryproto文件的路径
+binMean = config.binMean #修改成你的mean.binaryproto文件的路径
 # 均值文件
-mean_file='/home2/workplce/github/image_classes/data/mean.npy' #你想把生成的mean.npy文件放在哪个路径下
+mean_file = config.mean_file #你想把生成的mean.npy文件放在哪个路径下
 convert_mean(binMean,mean_file)
 
 # 这里对任何一个程序都是通用的，就是处理图片
@@ -43,7 +44,7 @@ transformer.set_raw_scale('data', 255)
 transformer.set_channel_swap('data', (2,1,0))
 
 # 加载一张测试图片
-test_img_path = '/home2/workplce/github/image_classes/caffenet/test_img/'
+test_img_path = config.test_img_path
 for file in os.listdir(test_img_path):
     if os.path.splitext(file)[1] == '.jpg':
         image_file = os.path.join(test_img_path, file)
@@ -67,7 +68,7 @@ for file in os.listdir(test_img_path):
         print '\n用时: ', round(time.time()-time_begin, 4), 's'
         img = cv2.imread(image_file)
         cv2.putText(img, '%s:%.3f'%(label,score), (30,30), 1, 2, (0,0,255)) 
-        save_file = '/home2/workplce/github/image_classes/preprocess/'+os.path.splitext(file)[0]+'_result'+'.jpg'
+        save_file = config.img_save_path + os.path.splitext(file)[0] + '_result' + '.jpg'
         print(save_file)
         cv2.imwrite(save_file,img)
         cv2.imshow('img',img)
