@@ -16,7 +16,7 @@ os.chdir(caffe_root)#更换工作目录
 # 设置网络结构
 net_file='/home2/workplce/github/image_classes/caffenet/deploy.prototxt'
 # 添加训练之后的参数
-caffe_model='/home2/workplce/github/image_classes/caffenet/models/caffenet_train_iter_500.caffemodel'
+caffe_model='/home2/workplce/github/image_classes/caffenet/models/caffenet_train_iter_1000.caffemodel'
 
 #这是一个由mean.binaryproto文件生成mean.npy文件的函数
 def convert_mean(binMean,npyMean):
