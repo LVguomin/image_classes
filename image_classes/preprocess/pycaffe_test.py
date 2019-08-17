@@ -1,22 +1,17 @@
 #encoding:utf-8
 import sys,os
-caffe_root = '/home2/caffe/'
-#sys.path.append(caffe_root + 'python')
 import numpy as np
 import caffe
 import cv2
 import time
-caffe.set_device(0)
-caffe.set_mode_gpu()
+#caffe.set_device(0)
+caffe.set_mode_cpu()
 time_begin = time.time()
-# 设置当前的工作环境在caffe下, 根据自己实际情况更改
-# 我们也把caffe/python也添加到当前环境
-os.chdir(caffe_root)#更换工作目录
 
 # 设置网络结构
 net_file='/home2/workplce/github/image_classes/caffenet/deploy.prototxt'
 # 添加训练之后的参数
-caffe_model='/home2/workplce/github/image_classes/caffenet/models/caffenet_train_iter_1000.caffemodel'
+caffe_model='/home2/workplce/github/image_classes/caffenet/models/caffenet_train_iter_4000.caffemodel'
 
 #这是一个由mean.binaryproto文件生成mean.npy文件的函数
 def convert_mean(binMean,npyMean):
@@ -49,8 +44,7 @@ transformer.set_channel_swap('data', (2,1,0))
 
 # 加载一张测试图片
 test_img_path = '/home2/workplce/github/image_classes/caffenet/test_img/'
-file_list = os.listdir(test_img_path)
-for file in file_list:
+for file in os.listdir(test_img_path):
     if os.path.splitext(file)[1] == '.jpg':
         image_file = os.path.join(test_img_path, file)
         im=caffe.io.load_image(image_file)
@@ -73,6 +67,8 @@ for file in file_list:
         print '\n用时: ', round(time.time()-time_begin, 4), 's'
         img = cv2.imread(image_file)
         cv2.putText(img, '%s:%.3f'%(label,score), (30,30), 1, 2, (0,0,255)) 
-        cv2.imwrite('./result.jpg',img)
+        save_file = '/home2/workplce/github/image_classes/preprocess/'+os.path.splitext(file)[0]+'_result'+'.jpg'
+        print(save_file)
+        cv2.imwrite(save_file,img)
         cv2.imshow('img',img)
         cv2.waitKey(0)
