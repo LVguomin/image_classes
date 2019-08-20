@@ -49,6 +49,8 @@ for file in os.listdir(test_img_path):
     if os.path.splitext(file)[1] == '.jpg':
         image_file = os.path.join(test_img_path, file)
         im=caffe.io.load_image(image_file)
+        im=cv2.resize(im,(config.resize_w, config.resize_h))
+        #print im.shape
         # 用上面的transformer.preprocess来处理刚刚加载图片
         net.blobs['data'].data[...] = transformer.preprocess('data',im)
         #网络开始向前传播啦
@@ -71,5 +73,5 @@ for file in os.listdir(test_img_path):
         save_file = config.img_save_path + os.path.splitext(file)[0] + '_result' + '.jpg'
         print(save_file)
         cv2.imwrite(save_file,img)
-        cv2.imshow('img',img)
-        cv2.waitKey(0)
+        #cv2.imshow('img',img)
+        #cv2.waitKey(0)
